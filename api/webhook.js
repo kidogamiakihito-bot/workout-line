@@ -147,7 +147,7 @@ function parseWorkout(text) {
 
 // ── LINEへの返信 ────────────────────────────────────
 async function reply(replyToken, text) {
-  await fetch('https://api.line.me/v2/bot/message/reply', {
+  const res = await fetch('https://api.line.me/v2/bot/message/reply', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -158,6 +158,12 @@ async function reply(replyToken, text) {
       messages: [{ type: 'text', text }],
     }),
   });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error('LINE reply error:', res.status, err);
+  } else {
+    console.log('LINE reply success');
+  }
 }
 
 // ── ユーティリティ ──────────────────────────────────
